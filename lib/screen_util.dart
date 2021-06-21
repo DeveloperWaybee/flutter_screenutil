@@ -5,12 +5,14 @@
 part of flutter_screenutil;
 
 class ScreenUtil {
-  static const Size defaultSize = Size(360, 690);
+  static const Size defaultSize = Size(375, 812);
+  static const double defaultPixelRatio = 3;
   static late ScreenUtil _instance;
 
   /// UI设计中手机尺寸 , dp
   /// Size of the phone in UI Design , dp
   late Size uiSize;
+  late double uiPixelRatio;
 
   ///屏幕方向
   late Orientation _orientation;
@@ -32,9 +34,11 @@ class ScreenUtil {
     BoxConstraints constraints, {
     Orientation orientation = Orientation.portrait,
     Size designSize = defaultSize,
+    double designPixelRatio = defaultPixelRatio,
   }) {
     _instance = ScreenUtil._()
       ..uiSize = designSize
+      ..uiPixelRatio = designPixelRatio
       .._orientation = orientation
       .._screenWidth = constraints.maxWidth
       .._screenHeight = constraints.maxHeight;
@@ -76,10 +80,12 @@ class ScreenUtil {
 
   /// 实际尺寸与UI设计的比例
   /// The ratio of actual width to UI design
-  double get scaleWidth => _screenWidth / uiSize.width;
+  double get scaleWidth =>
+      (_screenWidth * _pixelRatio) / (uiSize.width * uiPixelRatio);
 
   ///  /// The ratio of actual height to UI design
-  double get scaleHeight => _screenHeight / uiSize.height;
+  double get scaleHeight =>
+      (_screenHeight * _pixelRatio) / (uiSize.height * uiPixelRatio);
 
   double get scaleText => min(scaleWidth, scaleHeight);
 

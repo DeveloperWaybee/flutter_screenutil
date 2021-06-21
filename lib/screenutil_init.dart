@@ -5,6 +5,7 @@ class ScreenUtilInit extends StatelessWidget {
   ScreenUtilInit({
     required this.builder,
     this.designSize = ScreenUtil.defaultSize,
+    this.pixelRatio = ScreenUtil.defaultPixelRatio,
     Key? key,
   }) : super(key: key);
 
@@ -12,6 +13,7 @@ class ScreenUtilInit extends StatelessWidget {
 
   /// The [Size] of the device in the design draft, in dp
   final Size designSize;
+  final double pixelRatio;
 
   @override
   Widget build(BuildContext context) {
