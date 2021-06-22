@@ -6,6 +6,11 @@ class ScreenUtilInit extends StatelessWidget {
     required this.builder,
     this.designSize = ScreenUtil.defaultSize,
     this.designPixelRatio = ScreenUtil.defaultPixelRatio,
+    this.designMinWidthPixelRatio = ScreenUtil.defaultMinWidthPixelRatio,
+    this.designMaxWidthPixelRatio = ScreenUtil.defaultMaxWidthPixelRatio,
+    this.designMinHeightPixelRatio = ScreenUtil.defaultMinHeightPixelRatio,
+    this.designMaxHeightPixelRatio = ScreenUtil.defaultMaxHeightPixelRatio,
+    this.defaultNormalizeThreshold = ScreenUtil.defaultNormalizeThreshold,
     Key? key,
   }) : super(key: key);
 
@@ -14,6 +19,11 @@ class ScreenUtilInit extends StatelessWidget {
   /// The [Size] of the device in the design draft, in dp
   final Size designSize;
   final double designPixelRatio;
+  final double designMinWidthPixelRatio;
+  final double designMaxWidthPixelRatio;
+  final double designMinHeightPixelRatio;
+  final double designMaxHeightPixelRatio;
+  final double defaultNormalizeThreshold;
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +36,11 @@ class ScreenUtilInit extends StatelessWidget {
               orientation: orientation,
               designSize: designSize,
               designPixelRatio: designPixelRatio,
+              designMinWidthPixelRatio: designMinWidthPixelRatio,
+              designMaxWidthPixelRatio: designMaxWidthPixelRatio,
+              designMinHeightPixelRatio: designMinHeightPixelRatio,
+              designMaxHeightPixelRatio: designMaxHeightPixelRatio,
+              defaultNormalizeThreshold: defaultNormalizeThreshold,
             );
             return builder();
           }

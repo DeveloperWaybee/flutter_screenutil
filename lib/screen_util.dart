@@ -7,12 +7,22 @@ part of flutter_screenutil;
 class ScreenUtil {
   static const Size defaultSize = Size(375, 812);
   static const double defaultPixelRatio = 3;
+  static const double defaultMinWidthPixelRatio = 0.8;
+  static const double defaultMaxWidthPixelRatio = 1.2;
+  static const double defaultMinHeightPixelRatio = 0.8;
+  static const double defaultMaxHeightPixelRatio = 1.2;
+  static const double defaultNormalizeThreshold = 0.5;
   static late ScreenUtil _instance;
 
   /// UI设计中手机尺寸 , dp
   /// Size of the phone in UI Design , dp
   late Size uiSize;
   late double uiPixelRatio;
+  late double uiMinWidthPixelRatio;
+  late double uiMaxWidthPixelRatio;
+  late double uiMinHeightPixelRatio;
+  late double uiMaxHeightPixelRatio;
+  late double normalizeThreshold;
 
   ///屏幕方向
   late Orientation _orientation;
@@ -35,10 +45,21 @@ class ScreenUtil {
     Orientation orientation = Orientation.portrait,
     Size designSize = defaultSize,
     double designPixelRatio = defaultPixelRatio,
+    double designMinWidthPixelRatio = defaultMinWidthPixelRatio,
+    double designMaxWidthPixelRatio = defaultMaxWidthPixelRatio,
+    double designMinHeightPixelRatio = defaultMinHeightPixelRatio,
+    double designMaxHeightPixelRatio = defaultMaxHeightPixelRatio,
+    double defaultNormalizeThreshold = defaultNormalizeThreshold,
   }) {
     _instance = ScreenUtil._()
       ..uiSize = designSize
       ..uiPixelRatio = designPixelRatio
+      ..uiMinWidthPixelRatio = designMinWidthPixelRatio
+      ..uiMaxWidthPixelRatio = designMaxWidthPixelRatio
+      ..uiMinHeightPixelRatio = designMinHeightPixelRatio
+      ..uiMaxHeightPixelRatio = designMaxHeightPixelRatio
+      ..uiMaxHeightPixelRatio = designMaxHeightPixelRatio
+      ..normalizeThreshold = defaultNormalizeThreshold
       .._orientation = orientation
       .._screenWidth = constraints.maxWidth
       .._screenHeight = constraints.maxHeight;
@@ -80,12 +101,38 @@ class ScreenUtil {
 
   /// 实际尺寸与UI设计的比例
   /// The ratio of actual width to UI design
-  double get scaleWidth =>
-      (_screenWidth * _pixelRatio) / (uiSize.width * uiPixelRatio);
+  double get scaleWidth {
+    final scrnWidth = (_screenWidth * _pixelRatio);
+    final uiWidth = (uiSize.width * uiPixelRatio);
+    final diff = uiWidth - scrnWidth;
+
+    if (diff == 0) {
+      return 1;
+    } else if (diff > 0) {
+      final ratio = (scrnWidth - (diff * normalizeThreshold)) / uiWidth;
+      return max(uiMinWidthPixelRatio, (min(uiMaxWidthPixelRatio, ratio)));
+    } else {
+      final ratio = (scrnWidth + (diff * normalizeThreshold)) / uiWidth;
+      return max(uiMinWidthPixelRatio, (min(uiMaxWidthPixelRatio, ratio)));
+    }
+  }
 
   ///  /// The ratio of actual height to UI design
-  double get scaleHeight =>
-      (_screenHeight * _pixelRatio) / (uiSize.height * uiPixelRatio);
+  double get scaleHeight {
+    final scrnHeight = (_screenHeight * _pixelRatio);
+    final uiHeight = (uiSize.height * uiPixelRatio);
+    final diff = uiHeight - scrnHeight;
+
+    if (diff == 0) {
+      return 1;
+    } else if (diff > 0) {
+      final ratio = (scrnHeight - (diff * normalizeThreshold)) / uiHeight;
+      return max(uiMinHeightPixelRatio, (min(uiMaxHeightPixelRatio, ratio)));
+    } else {
+      final ratio = (scrnHeight + (diff * normalizeThreshold)) / uiHeight;
+      return max(uiMinHeightPixelRatio, (min(uiMaxHeightPixelRatio, ratio)));
+    }
+  }
 
   double get scaleText => min(scaleWidth, scaleHeight);
 
