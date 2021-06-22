@@ -105,15 +105,16 @@ class ScreenUtil {
     final scrnWidth = (_screenWidth * _pixelRatio);
     final uiWidth = (uiSize.width * uiPixelRatio);
     final diff = uiWidth - scrnWidth;
+    final normalizeValue = (diff * normalizeThreshold).abs();
 
-    if (diff == 0) {
-      return 1;
-    } else if (diff > 0) {
-      final ratio = (scrnWidth - (diff * normalizeThreshold)) / uiWidth;
+    if (scrnWidth > uiWidth) {
+      final ratio = (scrnWidth - normalizeValue) / uiWidth;
+      return max(uiMinWidthPixelRatio, (min(uiMaxWidthPixelRatio, ratio)));
+    } else if (scrnWidth > uiWidth) {
+      final ratio = (scrnWidth + normalizeValue) / uiWidth;
       return max(uiMinWidthPixelRatio, (min(uiMaxWidthPixelRatio, ratio)));
     } else {
-      final ratio = (scrnWidth + (diff * normalizeThreshold)) / uiWidth;
-      return max(uiMinWidthPixelRatio, (min(uiMaxWidthPixelRatio, ratio)));
+      return 1;
     }
   }
 
@@ -122,15 +123,16 @@ class ScreenUtil {
     final scrnHeight = (_screenHeight * _pixelRatio);
     final uiHeight = (uiSize.height * uiPixelRatio);
     final diff = uiHeight - scrnHeight;
+    final normalizeValue = (diff * normalizeThreshold).abs();
 
-    if (diff == 0) {
-      return 1;
-    } else if (diff > 0) {
-      final ratio = (scrnHeight - (diff * normalizeThreshold)) / uiHeight;
+    if (scrnHeight > uiHeight) {
+      final ratio = (scrnHeight - normalizeValue) / uiHeight;
+      return max(uiMinHeightPixelRatio, (min(uiMaxHeightPixelRatio, ratio)));
+    } else if (scrnHeight > uiHeight) {
+      final ratio = (scrnHeight + normalizeValue) / uiHeight;
       return max(uiMinHeightPixelRatio, (min(uiMaxHeightPixelRatio, ratio)));
     } else {
-      final ratio = (scrnHeight + (diff * normalizeThreshold)) / uiHeight;
-      return max(uiMinHeightPixelRatio, (min(uiMaxHeightPixelRatio, ratio)));
+      return 1;
     }
   }
 
